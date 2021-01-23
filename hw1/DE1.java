@@ -85,10 +85,12 @@ public class DE1 {
   }
 
   void process(String move) {
+    // i think weird black line is coming from this function
     int j = 0;
     int command = move.charAt(j);
     int x0 = -1, y0 = -1;
     int x1 = -1, y1 = -1, x2 = -1, y2 = -1;
+    // iterate through the string, which we named move for some reason. z always last char
     while (command != 'z') {
       int i = j + 1;
       for (j++;; j++)
