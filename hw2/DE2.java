@@ -1,9 +1,9 @@
-# DE2.java CS5125/6025 cheng 2020
-# implementing SHA-256
-# based on wikipedia's pseudocode (see lecture notes)
-# compared to java.security.MessageDigest's implementation
-# digests displayed as hex strings
-# usage: java DE2 < message
+// # DE2.java CS5125/6025 cheng 2020
+// # implementing SHA-256
+// # based on wikipedia's pseudocode (see lecture notes)
+// # compared to java.security.MessageDigest's implementation
+// # digests displayed as hex strings
+// # usage: java DE2 < message
 
 import java.io.*;
 import java.util.*;
@@ -178,4 +178,3 @@ public class DE2{
 	System.out.println(de2.digest());
  }
 }
-
