@@ -72,7 +72,8 @@ public class DE2 {
 			else
 				t += h;
 		}
-		System.out.println(t); // digest from Java package
+		// digest from Java package
+		System.out.println(t); 
 	}
 
 	void padding() { // multiple of 512 bits or 64 bytes
@@ -131,12 +132,12 @@ public class DE2 {
 
 	void aRound(int i) {
  		// NOTE: assuming we should be using >> for signed R shift, and not >>> for unsigned
-		int s1 = (e >> 6) ^ (e >> 11) ^ (e >> 25);
+		int s1 = Integer.rotateRight(e, 6) ^ Integer.rotateRight(e, 11) ^ Integer.rotateRight(e, 25);
 		// NOTE: single & in java is bit-wide AND for two ints, returning 3rd int. && for bools
 		// NOTE: ! is for bool NOT, ~ is for bitwise NOT
         int ch = (e & f) ^ ((~e) &  g);
         int temp1 = h + s1 + ch + roundConstants[i] + words[i];
-        int s0 = (a >> 2) ^ (a >> 13) ^ (a >> 22);
+        int s0 = Integer.rotateRight(a, 2) ^ Integer.rotateRight(a, 13) ^ Integer.rotateRight(a, 22);
         int maj = (a &  b) ^ (a &  c) ^ (b &  c);
         int temp2 = s0 + maj;
 
@@ -158,29 +159,29 @@ public class DE2 {
 		// NOTE: all the assignments below MIGHT need to be done in for loop...
 		for (int i = 0; i < 64; i++)
 			aRound(i);
-		hash[0] += a;
-		a = hash[0];
+			hash[0] += a;
+			a = hash[0];
 
-		hash[1] += b;
-		b = hash[1];
-		
-		hash[2] += c;
-		c = hash[2];
-		
-		hash[3] += d;
-		d = hash[3];
-		
-		hash[4] += e;
-		e = hash[4];
-		
-		hash[5] += f;
-		f = hash[5];
-		
-		hash[6] += g;
-		g = hash[6];
-		
-		hash[7] += h;
-		h = hash[7];
+			hash[1] += b;
+			b = hash[1];
+			
+			hash[2] += c;
+			c = hash[2];
+			
+			hash[3] += d;
+			d = hash[3];
+			
+			hash[4] += e;
+			e = hash[4];
+			
+			hash[5] += f;
+			f = hash[5];
+			
+			hash[6] += g;
+			g = hash[6];
+			
+			hash[7] += h;
+			h = hash[7];
 	}
 
 	String digest() {
