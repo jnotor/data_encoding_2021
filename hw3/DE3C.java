@@ -33,8 +33,13 @@ public class DE3C{
 		System.err.println(e.getMessage());
 		System.exit(1);
 	}
+	// Get name
 	item = in.nextLine();
+
+	// Get position
 	k = Integer.parseInt(in.nextLine());
+
+	// compute values of bytes and add to merkle arraylist; converting sha output here
 	int[] halfBytes = new int[2];
 	while (in.hasNextLine()){
 		String line = in.nextLine();
@@ -52,16 +57,29 @@ public class DE3C{
 		merkle.add(value);
 		depth++;
 	}	
+	System.out.println(merkle);
 	in.close();
   }
 
   void proof(){
-	byte[] root = md.digest(md.digest(item.getBytes()));  // a leaf of the merkle tree
+	// a leaf of the merkle tree (where item var is the name selected. i think). SHA it 2x
+	byte[] root = md.digest(md.digest(item.getBytes()));
+	System.out.println(root);
+
 	for (int i = 0; i < depth; i++){
+		// left child
 		if (k % 2 == 0){
-			// your code to update root from root and merkle[i]
-		}else{ 
-			// your code to update root from root and merkle[i] in another way
+			// concat the byte arrays with root on the left
+			byte[] temp = new byte[root.length + merkle.get(i).length];
+			System.arraycopy(root, 0, temp, 0, root.length);
+			System.arraycopy(merkle.get(i), 0, temp, root.length, merkle.get(i).length);
+			root = md.digest(md.digest(temp));
+			// right child
+		} else { 
+			byte[] temp = new byte[merkle.get(i).length + root.length];
+			System.arraycopy(merkle.get(i), 0, temp, 0, merkle.get(i).length);
+			System.arraycopy(root, 0, temp, merkle.get(i).length, root.length);
+			root = md.digest(md.digest(temp));
 		}
 		k /= 2;
 	}
@@ -70,6 +88,7 @@ public class DE3C{
 
 
   String HexString(byte[] value){
+	// helper function to print out the root
   	String s = "";
 	for (int i = 0; i < value.length; i++){
 		String t = Integer.toHexString(Byte.toUnsignedInt(value[i]));
