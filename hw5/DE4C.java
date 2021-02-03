@@ -10,7 +10,7 @@ import java.util.*;
 public class DE4C{
   String hexQ = null;
   BigInteger q = null;
-  BigInteger p = null;  // p = (q-1)/ 2
+  BigInteger p = null;
   static BigInteger two = new BigInteger("2");
 
   void readQ(String filename){
@@ -27,18 +27,24 @@ public class DE4C{
   }
 
  void testPrimality(){
+   BigInteger subtracter = null;
+   subtracter = new BigInteger("1");
+   BigInteger divider = null;
+   divider = new BigInteger("2");
    if (q.isProbablePrime(200)) 
     System.out.println("q is probably prime");
-    // your code for (q-1)/2 TODO
-    p =
+    p = q.subtract(subtracter);
+    p = p.divide(divider);
    if (p.isProbablePrime(200)) 
     System.out.println("p is probably prime");
  }
 
  void testPrimitiveness(){
-  // compute pow(2, p) mod q TODO 
-  BigInteger 2pq = 
-   System.out.println(2pq.toString(16));
+  // compute pow(2, p) mod q
+  BigInteger big_power = null;
+  big_power = new BigInteger("2");
+  BigInteger p2q = big_power.modPow(p, q);
+   System.out.println(p2q.toString(16));
  }
 
  public static void main(String[] args){
