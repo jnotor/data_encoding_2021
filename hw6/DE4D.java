@@ -141,24 +141,23 @@ public class DE4D {
       BigInteger k = new BigInteger(privateKeySize, random);
       Point kG = multiply(G, k); // k times point G
       Point kY = multiply(publicKeyB, k); // k times point publicKeyB
-      BigInteger mu = message.multiply(kY.x).mod(p); // message times kY.x mod p
-      // BigInteger mu = message.multiply(kY.x.mod(p)); // message times kY.x mod p
-      // BigInteger mu = kY.x.mod(p).multiply(message); // message times kY.x mod p
 
-      // NOTE: (kG, mu) is the encrypted message
       
-      // System.out.println("\nkG: ");
-      // System.out.println(kG);
-      // System.out.println("\nmu: ");
-      // System.out.println(mu.toString(16));
+      // Use Identity: (a * b) mod q = ((a mod q) * (b mod q)) mod q
+      BigInteger m = message.mod(p);
+      BigInteger u = kY.x.mod(p);
+      // NOTE BigInt X.multiply(y) says multiply x by y for big ints
+      BigInteger mu = m.multiply(u);
+      mu = mu.mod(p);
+      // NOTE: (kG, mu) is the encrypted message
       
       // Decrypt Message
       Point kY2 = multiply(kG, privateKeyB); // B computes kY as privateKeyB times kG
-      // BigInteger decodedMessage  = mu.multiply(kY2.x.modInverse(p)); // kY2.x modinverse times mu mod p
-      // BigInteger decodedMessage  = kY2.x.modInverse(p).multiply(mu); // kY2.x modinverse times mu mod p
-      // BigInteger decodedMessage  = mu.multiply(kY2.x).modInverse(p); // kY2.x modinverse times mu mod p
-      BigInteger decodedMessage  = kY2.x.modInverse(p).multiply(mu); // kY2.x modinverse times mu mod p
-      // BigInteger decodedMessage  = kY2.x.modInverse(mu.mod(p)); // kY2.x modinverse times mu mod p
+
+      // Division by d is multiplication by d-1, or the multiplicative inverse of d mod q.
+      BigInteger u_not = kY2.x.modInverse(p);
+      BigInteger decodedMessage = mu.multiply(u_not);
+      decodedMessage = decodedMessage.mod(p);
 
       System.out.println("\nDecoded message: ");
       System.out.println(decodedMessage.toString(16));
