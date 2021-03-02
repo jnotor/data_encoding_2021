@@ -151,7 +151,7 @@ public class DE10B {
     }
   }
 
-  void inverseAddRoundKey(int round) { // Your code from DE1B
+  void inverseAddRoundKey(int round) { 
     for (int k = 0; k < blockSize; k++)
       state[k] ^= roundKey[numberOfRounds - 1 - round][k];
   }
@@ -189,7 +189,7 @@ public class DE10B {
       destination[k] = source[k];
   }
 
-  void decrypt(String pattern) { // inverse of DE10A.encrypt()
+  void decrypt() { // inverse of DE10A.encrypt()
     int[] previousBlock = new int[blockSize];
     for (int k = 0; k < blockSize; k++)
       previousBlock[k] = 0;
@@ -197,29 +197,12 @@ public class DE10B {
       int[] currentBlock = new int[blockSize];
 
     while (readBlock() > 0) {
-      addBlock(state, previousBlock);
+      // cbawC
       copyBlock(currentBlock, state);
       blockDecipher();
+      addBlock(state, previousBlock);
       writeBlock();
       copyBlock(previousBlock, currentBlock);
-      // for (int i=0; i<pattern.length(); i++) {
-      //   if (pattern.charAt(i) == 'a') {
-      //     addBlock(state, previousBlock);
-      //   }
-      //   else if (pattern.charAt(i) == 'b') {
-      //     blockDecipher();
-      //   }
-      //   else if (pattern.charAt(i) == 'c') {
-      //     copyBlock(currentBlock, state);
-      //   }
-      //   else if (pattern.charAt(i) == 'C') {
-      //     copyBlock(previousBlock, currentBlock);
-      //   }
-      //   else if (pattern.charAt(i) == 'w'){
-      //     writeBlock();
-      //   }
-    // }
-      // Your code should be an arrangement of the following five function calls:
     }
     System.out.flush();
   }
@@ -229,6 +212,6 @@ public class DE10B {
     de10.makeLog();
     de10.buildS();
     de10.expandKey();
-    de10.decrypt(args[0]);
+    de10.decrypt();
   }
 }
