@@ -70,7 +70,8 @@ public class DE12B{
     // Your code: replace k by the index of a child according to bit (Walk down tree)
     k = k * 2 + 1; // left child
 
-    if (bit == 0) { // right child
+    // NOTE: reversing the logic for r and l child made no difference
+    if (bit == 1) { // right child
       k++; 
     }
     
