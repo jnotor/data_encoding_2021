@@ -51,39 +51,10 @@ public class DE12B{
   int n = 0;  // number of symbols decoded, stop the while loop when n == filesize
 
   while ((bit = inputBit()) >= 0){
-    /* my thoughts: if bit is zero, it should be left child, if 1 it should be 
-       right child. child can be calculated as position * 2 + 1 for left, + another 1
-       for right
-
-       there are 255 elements in codetree, and there are only ever 2 elements at
-       codetree[k]
-
-      codetree is a 2D array [][] of ints
-
-        for (int i=0; i<codetree.length; i++){
-          System.out.print(codetree[i][0]);
-          System.out.print("       length:" + codetree[i].length);
-          System.out.println("          " + codetree[i][1]);
-        }
-    
-    */
-    // Your code: replace k by the index of a child according to bit (Walk down tree)
-    k = k * 2 + 1; // left child
-
-    // NOTE: reversing the logic for r and l child made no difference
-    if (bit == 1) { // right child
-      k++; 
-    }
-    
-    if (k >= codetree.length){ // bounds check
-      k = 0;
-    }
-    
-    // System.out.println(bit + "  " + k);
+    k = codetree[k][bit];
     if (codetree[k][0] == 0){  // leaf
-       System.out.write(codetree[k][1]);
-       if (n++ == filesize) break; // ignore any additional bits
-       // Your code: restart for the next symbol by move to the root (Go up to root)
+       System.out.write(codetree[k][1]); // converts into to char via ASCII
+      if (n++ == filesize) break; // ignore any additional bits
        k = 0;
       }
   }
