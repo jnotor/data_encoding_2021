@@ -1,0 +1,25 @@
+the message  [ 77 6f 6f 70 73 69 65 2d 64 61 69 73 65 ]
+RS encoded  [ 77 6f 6f 70 73 69 65 2d 64 61 69 73 65 8c bc 61 1d a9 a6 c5 5b 34 10 16 8d fc 38 9c 7f 6a ]
+Error added  [ 77 6f 8a 70 73 ed 65 72 8b 61 69 73 89 8 bc 61 1d a9 a6 c5 5b 34 10 16 8d eb 38 9c 7f c5 ]
+Syndrome  [ 54 67 53 3e ba 3b 80 69 4a 6c b3 e2 17 1b d6 10 1 ]
+error locator  [ 5c 6d b7 1 12 1f 52 d9 1 ]
+Z [ af b6 5f fb 6e 8a 9b d8 1 ]
+0 af
+16 84
+17 ec
+4 17
+21 ef
+22 5f
+24 84
+27 e5
+
+0 af
+16 84
+17 ec
+4 17
+21 ef
+22 5f
+24 84
+27 e5
+
+corrected [ 77 6f 6f 70 73 69 65 2d 64 61 69 73 65 8c bc 61 1d a9 a6 c5 5b 34 10 16 8d fc 38 9c 7f 6a ]

@@ -24,6 +24,7 @@ public class DE5{
   int gcd(int a, int b){
 	if (a < b){ int t = a; a = b; b = t; }
 	int r = a % b;
+	evaluate(a);
 	while (r > 0){ a = b; b = r; r = a % b; }
 	return b;
   }
