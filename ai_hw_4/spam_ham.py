@@ -44,21 +44,11 @@ def create_prob_table(contents):
     total_ham = 0
     all_words_in_ham = set([])
 
-    unique_words = set(contents.replace('\n', ' ').split(' '))
+    all_words = contents.replace('\n', ' ').split(' ')
+    unique_words = set(all_words)
     main_dict = {}
     for word in unique_words:
         main_dict[word] = {'word_freq_in_spam' : 0, 'word_freq_in_ham':0}
-
-    # the below produces a bug
-    # main_dict = dict.fromkeys(unique_words, {'word_freq_in_spam' : 0, 'word_freq_in_ham':0})
-    # print(type(main_dict))
-    # print(main_dict['eng']['word_freq_in_spam'])
-    # print(main_dict['gud']['word_freq_in_spam'])
-    # main_dict['eng']['word_freq_in_spam'] = 1 + main_dict['eng']['word_freq_in_spam']
-    # print(main_dict['eng']['word_freq_in_spam'])
-    # print(main_dict['gud']['word_freq_in_spam'])
-    
-    # exit()
 
     # traverse each sms as a row/line and make them a new row in db, 
     for line in contents.split('\n'):
@@ -83,10 +73,31 @@ def create_prob_table(contents):
     totals = {'total_ham' : total_ham, 'total_spam' : total_spam,
               'unique_ham_w_count' : len(all_words_in_ham), 
               'unique_spam_w_count' : len(all_words_in_spam), 
-              'all_msg_count' : len(contents)}
+              'all_word_count' : len(all_words)}
 
     return main_dict, totals
 
+
+def handle_line(sentence, totals, w_freq):
+    # p_w = 1
+    p_w_spam = 1
+    p_w_ham = 1
+
+    # traverse each word in the sentence
+    for word in sentence:
+        # NOTE: We're ignoring words in sentences that we've not trained with
+        if word in w_freq:
+            # calc p(w|spam) and p(w|ham)
+            p_w_ham *= w_freq[word]['word_freq_in_ham'] / totals['unique_ham_w_count']
+            p_w_spam *= w_freq[word]['word_freq_in_spam'] / totals['unique_spam_w_count']
+            
+            # NOTE we dont actually need p_w for comparison since we'll divide both by it
+            # p_w *= (w_freq[word]['word_freq_in_ham'] + w_freq[word]['word_freq_in_spam']) / totals['all_word_count']
+    
+    pHam = p_w_ham * totals['total_ham'] / (totals['total_spam'] + totals['total_ham'])
+    pSpam = p_w_spam * totals['total_spam'] / (totals['total_spam'] + totals['total_ham'])
+
+    return pHam, pSpam
 
 def test(contents, totals, w_freq):
     ''' "For each word w in the processed messaged we find a product of P(w|spam). 
@@ -100,36 +111,28 @@ def test(contents, totals, w_freq):
     because both the numbers will be divided by that and it would not affect the
     comparison between the two."
     '''
-    total_spam_detected = 0
-    true_total_spam = 0 
+    accur_spam = accur_ham = t_spam = t_ham = true_t_spam = true_t_ham = 0 
     for line in contents:
         spam_state, data = line.split(' ', 1)
         
         if spam_state == 'spam':
-            true_total_spam += 1
+            true_t_spam += 1
+        else:
+            true_t_ham += 1
 
-        pHam = 0
-        pSpam = 0
-       # traverse each word in the sentence
         sentence = list(filter(None, data.split(' ')))
-        for word in sentence:
-            # NOTE: We're ignoring words in sentences that we've not trained with
-            if word in w_freq:
-                # calc p(w|spam) and p(w|ham)
-                p_w_spam = w_freq[word]['word_freq_in_spam'] / totals['unique_spam_w_count']
-                p_w_ham = w_freq[word]['word_freq_in_ham'] / totals['unique_ham_w_count']
-                print(p_w_spam, p_w_ham)
-                
-                # multiply them by P(spam) and P(ham) respectively
-                pHam *= p_w_spam * totals['total_spam'] / totals['all_msg_count']
-                pSpam *= p_w_ham * totals['total_ham'] / totals['all_msg_count']
+        pHam, pSpam = handle_line(sentence, totals, w_freq)
         
         if pSpam > pHam:
-            # print(pSpam, pHam)
-            total_spam_detected += 1
-
-    print(total_spam_detected, true_total_spam)
-    return total_spam_detected / true_total_spam
+            t_spam += 1
+            if spam_state == 'spam':
+                accur_spam += 1
+        else:
+            t_ham += 1
+            if spam_state == 'ham':
+                accur_ham += 1
+    
+    return accur_spam, accur_ham, t_spam, t_ham, true_t_spam, true_t_ham
             
 
 
@@ -142,15 +145,21 @@ def main():
     
     word_freqs, totals = create_prob_table(c_data)
 
-    with open('s/testing_spam.txt') as f:
+    with open('s/full_testing_spam.txt') as f:
         contents = f.read()
 
-    print('detected', test(contents.replace('\t', ' ').split('\n'), totals, word_freqs) *100 , 'percent of spam')
+    results = test(contents.replace('\t', ' ').split('\n'), totals, word_freqs)
 
-
-
-
-
+    print('Detected num spam:', results[2])
+    print('Detected num ham:', results[3])
+    print('True Num spam:', results[4])
+    print('True Num ham:', results[5])
+    print('Count of accurate spam:', results[0])
+    print('Count of accurate ham:', results[1])
+    print('Reported number of spam vs. total number of spam:', results[2]/results[4])
+    print('Reported number of ham vs. total number of ham:', results[3]/results[5])
+    print('Accuracy of spam detection:', results[0]/results[4] * 100)
+    print('Accuracy of ham detection:', results[1]/results[5] * 100)
     
 
 if __name__ == '__main__':
