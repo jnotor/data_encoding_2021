@@ -123,7 +123,7 @@ def test(contents, totals, w_freq):
         sentence = list(filter(None, data.split(' ')))
         pHam, pSpam = handle_line(sentence, totals, w_freq)
         
-        if pSpam > pHam:
+        if pSpam >= pHam:
             t_spam += 1
             if spam_state == 'spam':
                 accur_spam += 1
