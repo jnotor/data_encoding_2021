@@ -1,0 +1,11 @@
+DE14A.java performs (5,3)-wavelet transform on a BMP image like LenaRGB.bmp and 
+then does shrinkage of the high-frequency coefficients, followed by C1 encoding 
+using codewords in fib512.txt.  (The resulting file still has the BMP header but 
+will not be displayed by paint because the data part has been compressed.) 
+
+DE14B.java is to be its inverse. Complete DE14B by completing defib() as part of 
+decode(), the inverse of DE14A.encode(), and inverseColumnTransform() by exchanging
+i and j in inverseRowTransform().  (You may be able to test these two inverses 
+individually if you can.) 
+
+Submit your code and its run on DE14test1 as a decoded BMP file.
