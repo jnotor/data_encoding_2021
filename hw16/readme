@@ -1,0 +1,22 @@
+DE17A.java implements the LZW encoder and outputs a list of the codewords 
+(indices in the dictionary for the longest matches).
+
+DE17B.java is the decoder and you need to complete the updating of the dictionary.
+
+Make sure that your decoder is the inverse of DE17A and decode DE17test1.txt.
+
+Submit your code and the decoded DE17test1.txt.
+
+Table Building: Decoder
+•Encoded data is a sequence of codewords/table-indexes.
+
+•For each codeword, build a new entry and place the codeword/index as its prefix
+component.
+
+•The second component is the first byte of the phrase represented by the next
+codewordin the encoded data.
+
+•Loop: read next codeword, output the corresponding phrase in the dictionary 
+using the codeword as the index, fill the second component of the last phrase 
+with the first byte of the phrase just output, fill the first component of the 
+next entry with the codeword
