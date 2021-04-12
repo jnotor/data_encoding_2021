@@ -1,0 +1,5 @@
+DE16A performs Burrows-Wheeler transform and DE16B is its inverse.  
+
+Complete DE16B so that the inverse works. 
+
+Apply it to DE16test1 and show the original text file.

@@ -1,0 +1,7 @@
+DE15A.java is the JBIG adaptive arithmetic encoder (for fax) and DE15B.java the 
+decoder.  Complete a few lines in update() of DE15B so that you can decode 
+whatever you encoded with DE15A.  Of course we can only encode PBM files with 
+the type P4 and the file hand.bmp is an example.  
+
+Apply your decoder DE15B to DE15test1 and show the decoded PBM file using a 
+screenshot along with your code.
