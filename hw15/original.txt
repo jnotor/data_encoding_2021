@@ -1,0 +1,40 @@
+import java.lang.*;
+import java.io.*;
+
+
+public class HexDump{
+
+   public static void main(String[] args){
+     try{
+
+       int offset = 0;
+       int b = -1;
+       int pos = 0;
+       int[] buf = new int[16];
+       int lineno = 0;
+       while ((b = System.in.read()) != -1){
+         if (offset % 16 == 0) 
+            System.out.print("\r\n" + Integer.toHexString(offset) + "\t");
+         buf[pos++] = b;
+         int a = b / 16; b = b % 16;
+         System.out.print(Integer.toHexString(a) + Integer.toHexString(b));
+         offset++;
+         if (offset % 2 == 0) System.out.print(" ");
+         if (pos == 16){    System.out.print("    ");
+            for (int i = 0; i < 16; i++) if (buf[i] >= 32 && buf[i] < 127)
+               System.out.print((char)(buf[i])); else System.out.print(".");
+            pos = 0;
+            if (lineno++ > 300) break;
+         }
+         
+       }
+       if (pos > 0){  System.out.print("    ");
+            for (int i = 0; i < pos; i++) if (buf[i] >= 32 && buf[i] < 127)
+               System.out.print((char)(buf[i])); else System.out.print(".");
+            pos = 0;
+         }
+       System.out.println();
+   
+     }catch (IOException e){ System.err.println(e.getMessage()); System.exit(1); }
+   }
+}
