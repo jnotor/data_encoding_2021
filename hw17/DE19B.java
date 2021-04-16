@@ -69,18 +69,10 @@ public class DE19B extends JFrame{
     int frameBase = frame * frameSize;
     if (frame > 0)     
      for (int j = 0; j < frameSize; j++){
-/*  This is how we got buffer[frameBase + j} in DE19A.java:
-
-      int v = buffer[frameBase + j];
-      int u = buffer[frameBase - frameSize + j];
-      int diff = v - u;
-      buffer[frameBase + j] = (byte)diff;
-  
-     We need its inverse.
-     Given the recovered preceding frame value u and the differential 
-     in buffer[frameBase + j], write the code to replace buffer[frameBase + j}
-     with the recovered v.    
-*/
+       int u = buffer[frameBase - frameSize + j];
+       int diff = buffer[frameBase + j];
+       int v = diff + u;
+       buffer[frameBase + j] = (byte)v;
     }
     for (int i = 0; i < frameSize; i++) raw[i] = buffer[frameBase + i];
    }

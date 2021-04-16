@@ -1,0 +1,4 @@
+DE19A.java performs simple differential compression of CIF videos and DE19B.java
+decompresses and also plays the video.  DE19C simply plays any CIF sequences 
+(foreman is a well-known sequence).  Complete a function in DE19B so that you 
+can decompress and play DE19test1 and show the last frame of this sequence.
