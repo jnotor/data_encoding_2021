@@ -60,39 +60,39 @@ public class DE20A{
 }
 
 
-  void get_size_n_type(String type) {
-	/* example of getting entry 1's "type" from "stsd"
-	if (type.equals("stsd")) System.out.println(new String(buffer, pos + 5 * 4, 4));
-	*/
-	if (type.equals("stsz")) {
-		  System.out.println("entry 1 size:" + ByteBuffer.wrap(buffer, pos + 5 * 4, 4).getInt());
-		  System.out.println("entry 1 type:" + new String(buffer, pos + 6 * 4, 4));
+  void get_num_entries(String type) {
+	  System.out.println("num entries: " + ByteBuffer.wrap(buffer, pos + 3 * 4, 4).getInt());
 	}
-	else {
-		System.out.println("entry 1 size:" + ByteBuffer.wrap(buffer, pos + 4 * 4, 4).getInt());
-		System.out.println("entry 1 type:" + new String(buffer, pos + 5 * 4, 4));
-	}
+	
+	void nextAtom(){
+		int size = ByteBuffer.wrap(buffer, pos, 4).getInt();
+		String type = new String(buffer, pos + 4, 4);
+		
+		String[] ts_duration_vars = {"mvhd", "tkhd", "mdhd", "smhd"};
+		
+		if (Arrays.asList(ts_duration_vars).contains(type)) {
+			System.out.println(type + " size: " + size); 
+			get_ts_and_dur(type);
+		}
+		
+		String[] entry_count_vars = {"stsd", "stts", "stss", "stsc", "stsz", "stco"};
+		
+		if (Arrays.asList(entry_count_vars).contains(type)) {
+			System.out.println(type + " size: " + size);  
+			get_num_entries(type);
+			System.out.println();
+		}
+		
 
-	System.out.println();
-}
+	 if (type.equals("stsd")) {
+		/* example of getting entry 1's "type" from "stsd"
+		if (type.equals("stsd")) System.out.println(new String(buffer, pos + 5 * 4, 4));
+		*/
+		System.out.println("atom size: " + ByteBuffer.wrap(buffer, pos + 4 * 4, 4).getInt());
+		System.out.println("type: " + new String(buffer, pos + 5 * 4, 4));
+		System.out.println();
 
-  void nextAtom(){
-	int size = ByteBuffer.wrap(buffer, pos, 4).getInt();
-	String type = new String(buffer, pos + 4, 4);
-	
-	String[] ts_duration_vars = {"mvhd", "tkhd", "mdhd", "smhd"};
-	
-	if (Arrays.asList(ts_duration_vars).contains(type)) {
-		System.out.println(type + " size: " + size); 
-		get_ts_and_dur(type);
-	}
-	
-	String[] entry_count_vars = {"stsd", "stts", "stss", "stsc", "stsz", "stco"};
-	
-	if (Arrays.asList(entry_count_vars).contains(type)) {
-		System.out.println(type + " size: " + size);  
-		get_size_n_type(type);
-	}
+	 }
 
 	if (containers.contains(type)) pos += 8;
 	else pos += size;
