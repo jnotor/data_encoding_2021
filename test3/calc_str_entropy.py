@@ -17,4 +17,4 @@ def calc_entropy(in_str):
     return entropy * -1
 
 
-print(calc_entropy('OHIO'))
+print(calc_entropy('EECS'))
