@@ -61,7 +61,12 @@ public class DE20A{
 
 
   void get_num_entries(String type) {
+	if (type.equals("stsz")) {
+		System.out.println("num entries: " + ByteBuffer.wrap(buffer, pos + 4 * 4, 4).getInt());
+	}
+	else {
 	  System.out.println("num entries: " + ByteBuffer.wrap(buffer, pos + 3 * 4, 4).getInt());
+	}
 	}
 	
 	void nextAtom(){
@@ -83,6 +88,18 @@ public class DE20A{
 			System.out.println();
 		}
 		
+		int flag = 0;
+	 if (type.equals("stco")) {
+		 // assuming moov and trak are what youre looking for for movie and sound respectively
+		 // and that chunk offset table is indexable starting at 1
+		 if (flag == 0) {
+			System.out.println("offset of first chunk for sound: " + ByteBuffer.wrap(buffer, pos + 5 * 4, 4).getInt());
+			flag++;
+		}
+		else {
+			System.out.println("offset of first chunk for movie: " + ByteBuffer.wrap(buffer, pos + 5 * 4, 4).getInt());
+		}
+	 }
 
 	 if (type.equals("stsd")) {
 		/* example of getting entry 1's "type" from "stsd"

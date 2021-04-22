@@ -3,7 +3,7 @@ Write a function or add lines to DE20A.java to be able to get from sample-5s.mp4
 Time scale and duration from each of mvhd, tkhd, mdhd, and smhd.
 
 Number of entries (usually starting at 3 * 4 bytes in an atom) in each of stsd, 
-stts, stss, stsc, stsz, and stco.
+stts, stss, stsc, stsz + 1, and stco.
 
 After the entry number, there is often a table starting with the first entry with
 atoms starting with size and type.
